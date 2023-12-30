@@ -9,13 +9,13 @@
 <script setup lang="ts">
 import { FwbCarousel } from 'flowbite-vue'
 import { useMoviesStore } from '@/stores/movies'
-import type { ResponsePopularMovies } from '@/types/interfaces'
+import type { ResponseMovies } from '@/types/interfaces'
 import { computed, onMounted, ref } from 'vue'
 
 const store = useMoviesStore()
 const { getNowPlaying } = store
 
-const movies = ref<ResponsePopularMovies>({
+const movies = ref<ResponseMovies>({
   imageBaseUrl: '',
   data: []
 })

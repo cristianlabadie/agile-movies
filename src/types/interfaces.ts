@@ -44,7 +44,7 @@ export interface UseInfo {
   username: string
 }
 
-export interface ResponsePopularMovies {
+export interface ResponseMovies {
   imageBaseUrl: string
   data: Movie[]
 }

@@ -1,9 +1,8 @@
 <template>
   <!-- Carousel Movies Estelar -->
-  <section class="mt-20 px-4">
-    <Carousel />
-  </section>
+  <GridMoviesVue class="px-4 overflow-y-scroll no-scrollbar" />
 </template>
 <script setup lang="ts">
-import Carousel from '@/components/Carousel.vue'
+// import Carousel from '@/components/Carousel.vue'
+import GridMoviesVue from '@/components/GridMovies.vue'
 </script>
