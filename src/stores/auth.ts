@@ -10,7 +10,8 @@ export const useAuthStore = defineStore('auth', {
     refreshToken: null as string | null
   }),
   getters: {
-    isLoggedIn: (state) => state.logged
+    isLoggedIn: (state) => state.logged,
+    fullName: (state) => `${state.user.firstName} ${state.user.lastName}`
   },
   actions: {
     setTokens(token: string, refreshToken: string) {
@@ -57,7 +58,7 @@ export const useAuthStore = defineStore('auth', {
         return null
       }
     },
-    login(username: string, password: string): Promise<User> {
+    login(username: string, password: string): Promise<User | Error> {
       return new Promise(async (resolve, reject) => {
         try {
           const base_url = import.meta.env.VITE_SWAGGER_URL_API
@@ -71,6 +72,10 @@ export const useAuthStore = defineStore('auth', {
             body: JSON.stringify({ username, password })
           })
 
+          if (!response.ok) {
+            const { message }: ResponseError = await response.json()
+            throw new Error(message)
+          }
           const { data }: ResponseObject = await response.json()
           const { user, payload } = data
           const { token, refresh_token } = payload
@@ -81,7 +86,7 @@ export const useAuthStore = defineStore('auth', {
           this.refreshToken = refresh_token
           resolve(this.user)
         } catch (error) {
-          reject(error as ResponseError)
+          reject(error)
         }
       })
     },

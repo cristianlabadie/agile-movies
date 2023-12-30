@@ -38,20 +38,18 @@
       </button>
       <button
         class="flex items-center gap-x-2"
-        v-if="store.isLoggedIn"
+        v-if="authStore.isLoggedIn"
         id="dropdownDefaultButton"
         data-dropdown-toggle="dropdown"
         @click="openDropdown = !openDropdown"
       >
-        <span class="text-xs text-black dark:text-white"
-          >Hola {{ user.firstName }} {{ user.lastName }}
-        </span>
+        <span class="text-xs text-black dark:text-white">Hola {{ authStore.fullName }} </span>
         <!-- <User class="stroke-white" /> -->
       </button>
       <!-- Dropdown menu -->
       <div
         id="dropdown"
-        v-if="store.isLoggedIn && openDropdown"
+        v-if="authStore.isLoggedIn && openDropdown"
         class="z-50 bg-white divide-y shadow-lg absolute right-4 top-16 divide-gray-100 rounded-lg border dark:border-gray-800 w-44 dark:bg-gray-700"
       >
         <ul
@@ -86,13 +84,13 @@ import User from '@/components/icons/User.vue'
 import { ref } from 'vue'
 import Logo from '@/assets/logo.vue'
 
-const store = useAuthStore()
+const authStore = useAuthStore()
 const router = useRouter()
-const { user } = store
+const { user } = authStore
 const openDropdown = ref(false)
 
 const handleLogout = () => {
-  store.logout()
+  authStore.logout()
   router.push({ name: 'Login' })
   openDropdown.value = false
 }

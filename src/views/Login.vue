@@ -6,14 +6,18 @@
       <!-- <img src="../assets/logo.svg" alt="" class="w-24 m-auto mb-4 size-10" /> -->
       <Logo class="w-24 m-auto mb-4 size-10" />
 
-      <form class="flex flex-col gap-5">
+      <form class="flex flex-col gap-5" @submit.prevent="handleLogin">
         <fwb-input
           v-model="form.username"
           required
           placeholder="enter your username eg: agilesoft"
           label="Username"
           :validation-status="statusUsername || undefined"
-        />
+        >
+          <template #validationMessage v-if="statusUsername">
+            Please enter a valid username
+          </template>
+        </fwb-input>
 
         <fwb-input
           v-model="form.password"
@@ -22,9 +26,13 @@
           placeholder="enter your password eg: agile1234"
           label="Password"
           :validation-status="statusPassword || undefined"
-        />
+        >
+          <template #validationMessage v-if="statusPassword">
+            Please enter a valid password
+          </template>
+        </fwb-input>
 
-        <Button class="mt-2 w-full" :loading="loading" @click="handleLogin">Login</Button>
+        <Button class="mt-2 w-full" :loading="loading" type="submit">Login</Button>
       </form>
     </section>
   </div>
@@ -45,23 +53,33 @@ const form = ref({
 const loading = ref(false)
 const statusUsername = ref<'success' | 'error' | ''>('')
 const statusPassword = ref<'success' | 'error' | ''>('')
+const errors = ref('')
 
 const store = useAuthStore()
 const router = useRouter()
 const { login } = store
 
 const handleLogin = async () => {
-  const { username, password } = form.value
+  try {
+    const { username, password } = form.value
 
-  //TODO: Add validation
-  if (!username) return (statusUsername.value = 'error')
-  if (!password) return (statusPassword.value = 'error')
-  loading.value = true
+    //TODO: Add validation
+    if (!username) return (statusUsername.value = 'error')
+    if (!password) return (statusPassword.value = 'error')
+    loading.value = true
 
-  await login(username, password)
+    const response = await login(username, password)
+    console.log('response login copoennt:', response)
 
-  loading.value = false
+    loading.value = false
 
-  router.push({ name: 'Home' })
+    router.push({ name: 'Home' })
+  } catch (error) {
+    console.log('error login copoennt:', error)
+    loading.value = false
+    statusUsername.value = 'error'
+    statusPassword.value = 'error'
+    errors.value = error as string
+  }
 }
 </script>
