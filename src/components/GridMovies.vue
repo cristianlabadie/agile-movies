@@ -1,8 +1,13 @@
 <template>
-  <section class="mt-20 min-h-96">
+  <section class="mt-10 min-h-96">
     <Carousel />
 
-    <div class="mt-20 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 lg:gap-5">
+    <h2
+      class="text-2xl mt-10 mb-5 text-center lg:text-4xl dark:text-white font-semibold text-balance"
+    >
+      Películas más populares
+    </h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 lg:gap-5">
       <RouterLink
         :to="processUrl(movie.id)"
         v-for="movie in movies.data"
@@ -41,7 +46,7 @@
       class="py-10 h-50 dark:text-white animate-bounce text-center w-full"
       v-show="movies.data.length"
     >
-      <span>Loading more movies...</span>
+      <span>Cargando más películas...</span>
     </div>
   </section>
 </template>
@@ -49,9 +54,10 @@
 <script setup lang="ts">
 import { useMoviesStore } from '@/stores/movies'
 import type { ResponseMovies } from '@/types/interfaces'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useIntersectionObserver } from '@vueuse/core'
 import Carousel from './Carousel.vue'
+import { onBeforeRouteLeave } from 'vue-router'
 
 const store = useMoviesStore()
 const { getPopular } = store
@@ -74,13 +80,25 @@ const processUrl = (movieId: number) => {
 }
 
 const moreMovies = async () => {
-  page.value++
-  const newMovies = await getPopular(page.value)
+  store.incrementPage()
+  const newMovies = await getPopular(store.currentPage)
   movies.value.data = [...movies.value.data, ...newMovies.data]
-  console.log('moreMovies')
 }
 
 useIntersectionObserver(el, moreMovies, { threshold: 0 })
+
+onBeforeRouteLeave((to, from) => {
+  if (to.name == 'MovieDetail') {
+    const movieId = to.params.id
+    const movie = movies.value.data.find((movie) => movie.id == Number(movieId))
+
+    if (movie) {
+      store.setMovie(movie)
+      store.getActors(Number(movieId))
+      store.setBasePath(movies.value.imageBaseUrl)
+    }
+  }
+})
 
 onMounted(async () => {
   movies.value = await getPopular(page.value)

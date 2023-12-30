@@ -7,7 +7,10 @@ export default {
     './node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx,vue}'
   ],
   theme: {
-    extend: {}
+    extend: {},
+    fontFamily: {
+      sans: ['system-ui', 'sans-serif']
+    }
   },
   plugins: [require('flowbite/plugin')],
   darkMode: 'class'

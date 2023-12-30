@@ -1,10 +1,13 @@
 <template>
-  <fwb-carousel
-    :pictures="pictures"
-    :animation="true"
-    noIndicators
-    class="transition-all duration-200"
-  />
+  <div>
+    <h2 class="text-2xl lg:text-4xl dark:text-white mb-5 text-center">Películas en estreno 🎬</h2>
+    <fwb-carousel
+      :pictures="pictures"
+      :animation="true"
+      noIndicators
+      class="transition-all duration-200"
+    />
+  </div>
 </template>
 <script setup lang="ts">
 import { FwbCarousel } from 'flowbite-vue'

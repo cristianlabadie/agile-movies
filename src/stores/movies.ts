@@ -1,14 +1,22 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
-import type { ResponseMovies } from '@/types/interfaces'
+import type { Movie, ResponseMovies, Actor } from '@/types/interfaces'
 
 const base_url = import.meta.env.VITE_SWAGGER_URL_API
 
 export const useMoviesStore = defineStore('movies', {
+  persist: true,
   state: () => ({
-    movie: {},
-    actors: []
+    movie: {} as Movie,
+    actors: [] as Actor[],
+    page: 1,
+    basePath: ''
   }),
+  getters: {
+    getMovie: (state) => state.movie,
+    currentPage: (state) => state.page,
+    getBasePath: (state) => state.basePath
+  },
   actions: {
     async getNowPlaying(page: number): Promise<ResponseMovies> {
       const auth = useAuthStore()
@@ -31,6 +39,12 @@ export const useMoviesStore = defineStore('movies', {
           Authorization: `Bearer ${token}`
         }
       })
+
+      //TODO Revisar la manera de hacer esto mejor. quizas migrarlo a axios
+      if (response.status === 401) {
+        await checkTokenValidity()
+      }
+
       const data = await response.json()
       return data
     },
@@ -49,6 +63,15 @@ export const useMoviesStore = defineStore('movies', {
     },
     setMovie(movie: any) {
       this.movie = movie
+    },
+    incrementPage() {
+      this.page++
+    },
+    setBasePath(path: string) {
+      this.basePath = path
+    },
+    setActors(actors: Actor[]) {
+      this.actors = actors
     }
   }
 })

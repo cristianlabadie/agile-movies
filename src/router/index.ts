@@ -25,7 +25,7 @@ const router = createRouter({
     },
     {
       path: '/movie/:id',
-      name: 'Movie',
+      name: 'MovieDetail',
       component: MovieDetailVue,
       meta: {
         requiresAuth: true
