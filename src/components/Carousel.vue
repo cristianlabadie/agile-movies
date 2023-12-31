@@ -45,7 +45,7 @@ import 'swiper/css/effect-coverflow'
 import { useMoviesStore } from '@/stores/movies'
 import { onMounted } from 'vue'
 import MovieItem from './MovieItem.vue'
-import { RouterLink, onBeforeRouteLeave } from 'vue-router'
+import { RouterLink } from 'vue-router'
 
 const store = useMoviesStore()
 const { getNowPlaying } = store

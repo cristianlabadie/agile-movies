@@ -8,7 +8,7 @@
     :class="{
       'animate-pulse bg-slate-500 transition-all': loadingImg
     }"
-    :style="loadingImg ? '' : getBgUrl()"
+    :style="loadingImg ? '' : getBgUrl"
   ></div>
 
   <div
@@ -18,6 +18,7 @@
     <h2
       class="text-sm font-semibold line-clamp-2 text-balance text-white mb-4 uppercase"
       :class="{ 'md:text-3xl': extend }"
+      id="title"
     >
       {{ movie.title }}
     </h2>
@@ -25,6 +26,7 @@
     <h3
       class="text-xs line-clamp-2 font-semibold text-sky-200/80 -mt-4 mb-4 sm:mb-0"
       v-if="movie.overview"
+      id="overview"
     >
       {{ movie.overview }}
     </h3>
@@ -65,9 +67,9 @@ onMounted(() => {
   imgMovie.src = imageToShow.value
 })
 
-const getBgUrl = () => {
+const getBgUrl = computed(() => {
   return {
     backgroundImage: `url(${imgMovie.src})`
   }
-}
+})
 </script>

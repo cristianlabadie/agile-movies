@@ -18,15 +18,16 @@
       :src="imgActor.src"
       :alt="actor.name"
       class="w-auto h-48 rounded-md"
+      id="actor-img"
     />
 
     <div class="w-full">
       <!-- Actor info -->
-      <h3 class="text-xs text-pretty line-clamp-1">
+      <h3 class="text-xs text-pretty line-clamp-1" id="character">
         {{ actor.character }}
       </h3>
 
-      <small class="text-gray-400 truncate">
+      <small class="text-gray-400 truncate" id="name">
         {{ actor.name }}
       </small>
     </div>

@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Pruebas en ActorItem component > Debe de renderizar el componente correctamente 1`] = `
+"<div class="min-w-32 select-none flex flex-col gap-1 dark:text-white items-center">
+  <div>
+    <div class="animate-pulse">
+      <div class="bg-gray-300 dark:bg-gray-600 w-32 h-48 rounded-md"></div>
+    </div>
+  </div>
+  <div class="w-full">
+    <!-- Actor info -->
+    <h3 class="text-xs text-pretty line-clamp-1" id="character">Arthur Curry / Aquaman</h3><small class="text-gray-400 truncate" id="name">Jason Momoa</small>
+  </div>
+</div>"
+`;

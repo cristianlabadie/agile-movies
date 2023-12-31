@@ -6,12 +6,13 @@
       <!-- <img src="../assets/logo.svg" alt="" class="w-24 m-auto mb-4 size-10" /> -->
       <Logo class="w-24 m-auto mb-4 size-10" />
 
-      <form class="flex flex-col gap-5" @submit.prevent="handleLogin">
+      <form class="flex flex-col gap-5" @submit.prevent="handleLogin" id="loginForm">
         <fwb-input
           v-model="form.username"
           required
           placeholder="Ingresa tu Username ej: agilesoft"
           label="Username"
+          id="username"
           :validation-status="statusUsername || undefined"
         >
           <template #validationMessage v-if="statusUsername && statusUsername == 'error'">
@@ -25,6 +26,7 @@
           required
           placeholder="Ingresa tu contraseña eg: agile1234"
           label="Contraseña"
+          id="password"
           autocomplete="on"
           :validation-status="statusPassword || undefined"
         >
@@ -33,7 +35,9 @@
           </template>
         </fwb-input>
 
-        <Button class="mt-2 w-full" :loading="loading" type="submit">Iniciar Sesión</Button>
+        <Button class="mt-2 w-full" :loading="loading" type="submit" id="loginButton"
+          >Iniciar Sesión</Button
+        >
       </form>
     </section>
   </div>
