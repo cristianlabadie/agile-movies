@@ -53,9 +53,11 @@ export const useMoviesStore = defineStore('movies', {
       this.actors = actors
     },
     resetPagesPopular() {
+      this.popularMovies = []
       this.pagePopular = 1
     },
     resetPagesPremiere() {
+      this.premiereMovies = []
       this.pagePremiere = 1
     }
   }

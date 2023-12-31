@@ -2,7 +2,6 @@
   <nav class="flex justify-between p-4 bg-gray-200 dark:bg-gray-800">
     <!-- Logo -->
     <RouterLink to="/" class="flex items-center">
-      <!-- <img src="../assets/agilesoft-logo-white.png" alt="" class="w-24 h-auto" /> -->
       <Logo class="w-24 h-auto" />
     </RouterLink>
 
@@ -78,7 +77,6 @@ import Logo from '@/assets/logo.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
-const { user } = authStore
 const openDropdown = ref(false)
 
 const handleLogout = () => {

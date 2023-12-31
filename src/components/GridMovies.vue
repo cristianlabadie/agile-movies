@@ -29,7 +29,6 @@
 
 <script setup lang="ts">
 import { onBeforeRouteLeave } from 'vue-router'
-import type { ResponseMovies } from '@/types/interfaces'
 import { useMoviesStore } from '@/stores/movies'
 import { useIntersectionObserver } from '@vueuse/core'
 import { onMounted, ref } from 'vue'
@@ -39,10 +38,6 @@ import MovieItem from './MovieItem.vue'
 const store = useMoviesStore()
 const { getPopular } = store
 const el = ref<HTMLElement | null>(null)
-const movies = ref<ResponseMovies>({
-  imageBaseUrl: '',
-  data: []
-})
 
 const processUrl = (movieId: number) => {
   return '/movie/' + movieId

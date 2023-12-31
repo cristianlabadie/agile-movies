@@ -94,6 +94,7 @@ onBeforeRouteLeave((to, from) => {
 })
 
 onBeforeRouteUpdate((to, from) => {
-  moviesStore.resetPage()
+  moviesStore.resetPagesPopular()
+  moviesStore.resetPagesPremiere()
 })
 </script>

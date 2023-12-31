@@ -104,7 +104,9 @@ export const useAuthStore = defineStore('auth', {
       const moviesStore = useMoviesStore()
       moviesStore.setMovie({} as any)
       moviesStore.setActors([])
-      moviesStore.resetPage()
+
+      moviesStore.resetPagesPopular()
+      moviesStore.resetPagesPremiere()
     }
   }
 })
