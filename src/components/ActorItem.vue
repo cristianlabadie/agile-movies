@@ -1,8 +1,14 @@
 <template>
   <div class="min-w-32 flex flex-col gap-1 dark:text-white items-center">
+    <div v-if="loadingImg">
+      <div class="animate-pulse">
+        <div class="bg-gray-300 dark:bg-gray-600 w-32 h-48 rounded-md"></div>
+      </div>
+    </div>
+
     <img
-      v-if="actor.profile_path"
-      :src="baseUrl + actor.profile_path"
+      v-else-if="!loadingImg && actor.profile_path"
+      :src="imgActor.src"
       :alt="actor.name"
       class="w-full h-auto rounded-md"
     />
@@ -29,9 +35,9 @@
 
 <script setup lang="ts">
 import type { Actor } from '@/types/interfaces'
-import type { PropType } from 'vue'
+import { ref, type PropType } from 'vue'
 
-defineProps({
+const props = defineProps({
   actor: {
     type: Object as PropType<Actor>,
     required: true
@@ -41,4 +47,13 @@ defineProps({
     required: true
   }
 })
+
+const imgActor = new Image()
+const loadingImg = ref(true)
+
+imgActor.onload = () => {
+  loadingImg.value = false
+}
+
+imgActor.src = props.baseUrl + props.actor.profile_path
 </script>

@@ -1,40 +1,83 @@
 <template>
-  <section class="p-5">
+  <section class="p-5 max-w-4xl m-auto">
+    <RouterLink
+      to="/"
+      class="dark:text-white opacity-70 hover:opacity-100 transition-all duration-150 dark:hover:text-white mb-5 flex items-center gap-2"
+    >
+      <ArrowBack class="size-4" />
+      Volver
+    </RouterLink>
     <div>
-      <h1 class="dark:text-white text-xl uppercase">{{ movie.title }}</h1>
+      <h1 class="dark:text-white text-xl uppercase md:text-3xl">{{ movie.title }}</h1>
 
+      <div v-if="loadingFrontPage">
+        <div class="animate-pulse mt-10">
+          <div class="bg-gray-300 dark:bg-gray-600 aspect-16/9 h-48 w-full rounded-md"></div>
+        </div>
+      </div>
       <img
-        :src="moviesStore.getBasePath + movie.backdrop_path"
-        class="mt-10 m-auto w-full h-auto aspect-16/9 rounded-md"
+        v-else
+        :src="imgFrontPage.src"
+        class="mt-10 m-auto w-full h-auto aspect-16/9 rounded-md max-w-4xl"
         :alt="movie.title"
       />
     </div>
 
     <article class="mt-10">
-      <img
-        :src="moviesStore.getBasePath + movie.poster_path"
-        class="w-32 h-32 md:w-52 rounded-md float-left mr-4 !aspect-[2/4]"
-        :alt="movie.title"
-        :style="getShapeOutside(moviesStore.getBasePath + movie.poster_path)"
-      />
-      <p class="dark:text-white text-xs leading-5">{{ movie.overview }}</p>
+      <h3 class="dark:text-white text-xl md:text-2xl mb-2">Sinopsis</h3>
+
+      <div class="sm:flex">
+        <div v-if="loadingPoster">
+          <div class="animate-pulse">
+            <div
+              class="bg-gray-300 dark:bg-gray-600 w-44 h-64 md:w-52 rounded-md float-left mr-4"
+            ></div>
+          </div>
+        </div>
+        <img
+          v-else
+          :src="imgPoster.src"
+          class="w-auto h-64 aspect-auto md:w-52 rounded-md float-left mr-4 sm:float-none"
+          :alt="movie.title"
+          :style="getShapeOutside(imgPoster.src)"
+        />
+        <p class="dark:text-white text-xs sm:text-base leading-5">
+          {{ movie.overview }}
+        </p>
+      </div>
     </article>
 
-    <article class="mt-10">
+    <article class="mt-32 sm:mt-20">
+      <h3 class="dark:text-white text-xl mb-2 md:text-2xl">Reparto</h3>
       <Actors :actors="moviesStore.actors" :baseUrl="moviesStore.getBasePath" />
     </article>
   </section>
 </template>
 <script setup lang="ts">
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { RouterLink, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { useMoviesStore } from '@/stores/movies'
 import Actors from '@/components/Actors.vue'
+import { ref } from 'vue'
+import ArrowBack from '@/components/icons/ArrowBack.vue'
 
-const route = useRoute()
 const moviesStore = useMoviesStore()
-const movieId = route.params.id
+const loadingFrontPage = ref(true)
+const loadingPoster = ref(true)
+const imgFrontPage = new Image()
+const imgPoster = new Image()
 
 const movie = moviesStore.getMovie
+
+imgFrontPage.onload = () => {
+  loadingFrontPage.value = false
+}
+
+imgPoster.onload = () => {
+  loadingPoster.value = false
+}
+
+imgFrontPage.src = moviesStore.getBasePath + movie.backdrop_path
+imgPoster.src = moviesStore.getBasePath + movie.poster_path
 
 const getShapeOutside = (url: string) => {
   return {
@@ -48,5 +91,9 @@ onBeforeRouteLeave((to, from) => {
     moviesStore.setMovie(null)
     moviesStore.setActors([])
   }
+})
+
+onBeforeRouteUpdate((to, from) => {
+  moviesStore.resetPage()
 })
 </script>

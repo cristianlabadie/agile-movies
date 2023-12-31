@@ -5,11 +5,6 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AgileMovies</title>
-  </head>
-  <body class="dark:bg-gray-700">
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-    <script src="/src/lib/ToggleMode.js" defer></script>
     <script type="module" defer>
       // On page load or when changing themes, best to add inline in `head` to avoid FOUC
       if (
@@ -22,5 +17,10 @@
         document.documentElement.classList.remove('dark')
       }
     </script>
+  </head>
+  <body class="dark:bg-gray-700 min-h-screen">
+    <div id="app" class="flex flex-col min-h-screen"></div>
+    <script type="module" src="/src/main.ts"></script>
+    <script src="/src/lib/ToggleMode.js" defer></script>
   </body>
 </html>

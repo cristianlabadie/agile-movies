@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex justify-between p-4 bg-gray-200/40 dark:bg-gray-800">
+  <nav class="flex justify-between p-4 bg-gray-200 dark:bg-gray-800">
     <!-- Logo -->
     <RouterLink to="/" class="flex items-center">
       <!-- <img src="../assets/agilesoft-logo-white.png" alt="" class="w-24 h-auto" /> -->
@@ -44,7 +44,7 @@
         @click="openDropdown = !openDropdown"
       >
         <span class="text-xs text-black dark:text-white">Hola {{ authStore.fullName }} </span>
-        <!-- <User class="stroke-white" /> -->
+        <User class="stroke-black hidden sm:block" />
       </button>
       <!-- Dropdown menu -->
       <div
@@ -56,14 +56,6 @@
           class="py-2 text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="dropdownDefaultButton"
         >
-          <li>
-            <button
-              href="#"
-              class="block px-4 py-2 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Profile
-            </button>
-          </li>
           <li>
             <button
               @click="handleLogout"

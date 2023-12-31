@@ -8,7 +8,7 @@ import Footer from './components/Footer.vue'
   <header class="sticky top-0 z-50 shadow-md dark:shadow-none">
     <Navbar />
   </header>
-  <main class="container m-auto">
+  <main class="container m-auto flex-1">
     <RouterView />
   </main>
   <Footer />

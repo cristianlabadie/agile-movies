@@ -1,5 +1,8 @@
-import type { ResponseObject, ResponseError, User } from '@/types/interfaces'
+import type { ResponseLogin, ResponseError, User, Data } from '@/types/interfaces'
 import { defineStore } from 'pinia'
+import { AuthService } from '@/services/auth.service'
+import Api from '@/services/api.service'
+import { useMoviesStore } from './movies'
 
 export const useAuthStore = defineStore('auth', {
   persist: true,
@@ -14,14 +17,6 @@ export const useAuthStore = defineStore('auth', {
     fullName: (state) => `${state.user.firstName} ${state.user.lastName}`
   },
   actions: {
-    setTokens(token: string, refreshToken: string) {
-      this.token = token
-      this.refreshToken = refreshToken
-    },
-    clearTokens() {
-      this.token = null
-      this.refreshToken = null
-    },
     async checkTokenValidity() {
       const isTokenValid = false
 
@@ -36,23 +31,13 @@ export const useAuthStore = defineStore('auth', {
     },
     async fetchNewAccessToken() {
       try {
-        const base_url = import.meta.env.VITE_SWAGGER_URL_API
-
-        const response = await fetch(base_url + '/auth/refresh', {
-          method: 'POST',
-          headers: {
-            'x-hack-create': '',
-            'Content-Type': 'application/json'
-            // Authorization: `Bearer ${this.refreshToken}`
-          },
-          body: JSON.stringify({ refresh_token: this.refreshToken })
-        })
-
-        const { data }: ResponseObject = await response.json()
+        const response = await AuthService.refreshToken(this.refreshToken as string)
+        const { data } = response as ResponseLogin
         const { payload } = data
         const { token } = payload
 
-        return token
+        this.token = token
+        Api.setHeader(token)
       } catch (error) {
         console.log(error)
         return null
@@ -61,22 +46,16 @@ export const useAuthStore = defineStore('auth', {
     login(username: string, password: string): Promise<User | Error> {
       return new Promise(async (resolve, reject) => {
         try {
-          const base_url = import.meta.env.VITE_SWAGGER_URL_API
-
-          const response = await fetch(base_url + '/auth/login', {
-            method: 'POST',
-            headers: {
-              'x-hack-create': '',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password })
+          const response = await AuthService.login({
+            username,
+            password
           })
-
-          if (!response.ok) {
-            const { message }: ResponseError = await response.json()
+          if (!response.hasOwnProperty('data')) {
+            const { message } = response as ResponseError
             throw new Error(message)
           }
-          const { data }: ResponseObject = await response.json()
+
+          const { data } = response as ResponseLogin
           const { user, payload } = data
           const { token, refresh_token } = payload
 
@@ -84,6 +63,8 @@ export const useAuthStore = defineStore('auth', {
           this.user = user
           this.token = token
           this.refreshToken = refresh_token
+
+          Api.setHeader(token)
           resolve(this.user)
         } catch (error) {
           reject(error)
@@ -104,7 +85,7 @@ export const useAuthStore = defineStore('auth', {
             }
           })
 
-          const { data }: ResponseObject = await response.json()
+          const { data }: ResponseLogin = await response.json()
           const { user } = data
 
           this.user = user
@@ -119,6 +100,11 @@ export const useAuthStore = defineStore('auth', {
       this.user = {} as User
       this.token = null
       this.refreshToken = null
+
+      const moviesStore = useMoviesStore()
+      moviesStore.setMovie({} as any)
+      moviesStore.setActors([])
+      moviesStore.resetPage()
     }
   }
 })

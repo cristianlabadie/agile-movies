@@ -1,10 +1,9 @@
-export interface ResponseObject {
-  data: Data
-}
-
 export interface ResponseError {
   message: string
   statusCode: number
+}
+export interface ResponseLogin {
+  data: Data
 }
 
 export interface Data {
