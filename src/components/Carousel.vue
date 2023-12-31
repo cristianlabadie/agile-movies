@@ -67,18 +67,6 @@ const moreMovies = async () => {
   await getNowPlaying()
 }
 
-onBeforeRouteLeave((to, from) => {
-  if (to.name == 'MovieDetail') {
-    const movieId = to.params.id
-    const movie = store.getPremiereMovies.find((movie) => movie.id == Number(movieId))
-
-    if (movie) {
-      store.setMovie(movie)
-      store.getActors(Number(movieId))
-    }
-  }
-})
-
 onMounted(async () => {
   await getNowPlaying()
 

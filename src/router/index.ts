@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
-import MovieDetailVue from '@/views/MovieDetail.vue'
+import MovieDetail from '@/views/MovieDetail.vue'
+import NotFound from '@/views/NotFound.vue'
+import { useMoviesStore } from '@/stores/movies'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,9 +28,17 @@ const router = createRouter({
     {
       path: '/movie/:id',
       name: 'MovieDetail',
-      component: MovieDetailVue,
+      component: MovieDetail,
       meta: {
         requiresAuth: true
+      }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFound,
+      meta: {
+        requiresAuth: false
       }
     }
   ]

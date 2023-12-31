@@ -47,6 +47,40 @@
       </div>
     </article>
 
+    <article>
+      <h3 class="dark:text-white text-xl md:text-2xl mb-2 mt-10">Información</h3>
+      <div class="flex flex-col sm:flex-row gap-5">
+        <div class="flex flex-col gap-2">
+          <p class="dark:text-white text-xs sm:text-base">
+            <span class="font-semibold">Fecha de estreno:</span>
+            {{ movie.release_date }}
+          </p>
+          <p class="dark:text-white text-xs sm:text-base">
+            <span class="font-semibold">Popularidad:</span>
+            {{ movie.popularity }}
+          </p>
+        </div>
+        <div class="flex flex-col gap-2">
+          <p class="dark:text-white text-xs sm:text-base">
+            <span class="font-semibold">Idioma:</span>
+            {{ movie.original_language }}
+          </p>
+          <p class="dark:text-white text-xs sm:text-base">
+            <span class="font-semibold">Titulo original:</span>
+            {{ movie.original_title }}
+          </p>
+          <p class="dark:text-white text-xs sm:text-base">
+            <span class="font-semibold">Resumen de Votos:</span>
+            {{ movie.vote_average }}
+          </p>
+          <p class="dark:text-white text-xs sm:text-base">
+            <span class="font-semibold">Cantidad de Votos:</span>
+            {{ movie.vote_count }}
+          </p>
+        </div>
+      </div>
+    </article>
+
     <article class="mt-32 sm:mt-20">
       <h3 class="dark:text-white text-xl mb-2 md:text-2xl">Reparto</h3>
       <Actors :actors="moviesStore.actors" :baseUrl="moviesStore.getBasePath" />
@@ -54,10 +88,10 @@
   </section>
 </template>
 <script setup lang="ts">
-import { RouterLink, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { RouterLink, onBeforeRouteLeave, onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { useMoviesStore } from '@/stores/movies'
 import Actors from '@/components/Actors.vue'
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import ArrowBack from '@/components/icons/ArrowBack.vue'
 
 const moviesStore = useMoviesStore()
@@ -65,8 +99,9 @@ const loadingFrontPage = ref(true)
 const loadingPoster = ref(true)
 const imgFrontPage = new Image()
 const imgPoster = new Image()
+const router = useRouter()
 
-const movie = moviesStore.getMovie
+const movie = computed(() => moviesStore.getMovie)
 
 imgFrontPage.onload = () => {
   loadingFrontPage.value = false
@@ -76,8 +111,8 @@ imgPoster.onload = () => {
   loadingPoster.value = false
 }
 
-imgFrontPage.src = moviesStore.getBasePath + movie.backdrop_path
-imgPoster.src = moviesStore.getBasePath + movie.poster_path
+imgFrontPage.src = moviesStore.getBasePath + movie.value.backdrop_path
+imgPoster.src = moviesStore.getBasePath + movie.value.poster_path
 
 const getShapeOutside = (url: string) => {
   return {
@@ -86,10 +121,10 @@ const getShapeOutside = (url: string) => {
   }
 }
 
-onBeforeRouteLeave((to, from) => {
-  if (to.name == 'Home') {
-    moviesStore.setMovie(null)
-    moviesStore.setActors([])
+onMounted(() => {
+  // Si no hay película, redirigir a la página 404
+  if (!Object.keys(movie.value).length) {
+    router.push('/404')
   }
 })
 

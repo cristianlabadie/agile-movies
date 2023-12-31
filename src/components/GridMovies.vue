@@ -54,7 +54,10 @@ useIntersectionObserver(el, moreMovies, { threshold: 0.5 })
 onBeforeRouteLeave((to, from) => {
   if (to.name == 'MovieDetail') {
     const movieId = to.params.id
-    const movie = store.getPremiereMovies.find((movie) => movie.id == Number(movieId))
+    let movie = store.getPremiereMovies.find((movie) => movie.id == Number(movieId))
+    if (!movie) {
+      movie = store.getPopularMovies.find((movie) => movie.id == Number(movieId))
+    }
 
     if (movie) {
       store.setMovie(movie)
