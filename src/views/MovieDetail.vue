@@ -59,12 +59,12 @@
             <span class="font-semibold">Popularidad:</span>
             {{ movie.popularity }}
           </p>
-        </div>
-        <div class="flex flex-col gap-2">
           <p class="dark:text-white text-xs sm:text-base">
             <span class="font-semibold">Idioma:</span>
             {{ movie.original_language }}
           </p>
+        </div>
+        <div class="flex flex-col gap-2">
           <p class="dark:text-white text-xs sm:text-base">
             <span class="font-semibold">Titulo original:</span>
             {{ movie.original_title }}
